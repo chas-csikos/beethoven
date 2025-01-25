@@ -1,3 +1,5 @@
+\version "2.24.4"
+
 \paper {
 % Paper size and margins
   #(set-paper-size "arch a")
@@ -7,7 +9,7 @@
   bottom-margin = 0.5\in
   indent        = 0.25\in
 % Other paper variables
-  tagline = ##f    
+  tagline = ##f
   ragged-last = ##f
   ragged-bottom = ##f
   ragged-last-bottom = ##f
@@ -24,10 +26,88 @@
     )
   )
 % Titling
-  % Custom titling goes here
+  scoreTitleMarkup = \markup {
+    \fill-line {
+      \null
+    }
+  }
+  bookTitleMarkup = \markup {
+    \vspace #4.77
+    \column {
+      \fill-line {
+          \bold
+          \abs-fontsize #32
+          \fromproperty #'header:title
+      }
+      \fill-line {
+          \italic
+          \bold
+          \abs-fontsize #16
+          \fromproperty #'header:subtitle
+      }
+      \fill-line {
+          \italic
+          \abs-fontsize #8
+          \fromproperty #'header:dedication
+      }
+    }
+  }
+  oddHeaderMarkup = \markup {
+    \fill-line{
+      \line {
+        \abs-fontsize #10
+        \override #'(font-features . ("smcp" "onum"))
+          \fromproperty #'header:titleRunner
+
+        \abs-fontsize #8
+        \override #'(font-features . ("smcp" "onum"))
+          \fromproperty #'header:piece
+      }
+      \null
+      \line {
+          \abs-fontsize #8
+            \override #'(font-features . ("smcp" "onum"))
+            \fromproperty #'header:opus
+          \abs-fontsize #10
+            \override #'(font-features . ("smcp" "onum"))
+            \fromproperty #'header:composer
+          \if \should-print-page-number
+            \bold
+            \abs-fontsize #10
+            \fromproperty #'page:page-number-string
+      }
+    }
+  }
+  evenHeaderMarkup = \markup {
+    \fill-line{
+      \line {
+        \if \should-print-page-number
+            \bold
+            \abs-fontsize #10
+            \fromproperty #'page:page-number-string
+        \abs-fontsize #10
+        \override #'(font-features . ("smcp" "onum"))
+          \fromproperty #'header:titleRunner
+
+        \abs-fontsize #8
+        \override #'(font-features . ("smcp" "onum"))
+          \fromproperty #'header:piece
+      }
+      \null
+      \line {
+          \abs-fontsize #8
+            \override #'(font-features . ("smcp" "onum"))
+            \fromproperty #'header:opus
+          \abs-fontsize #10
+            \override #'(font-features . ("smcp" "onum"))
+            \fromproperty #'header:composer
+      }
+    }
+  }
 % Align top and bottom lines across pages
   % (User Variable)
   % Distance from outer staff line to paper edge
+  fist-staff-margin   = 3.0\in
   top-staff-margin    = 1.0\in
   bottom-staff-margin = 1.0\in
   % Align Top Staffs
@@ -50,14 +130,19 @@
     last-bottom-spacing.padding          = -50
     % do not stretch the distance
     last-bottom-spacing.stretchability   = 0
-
+  % First system (space for title)
+    markup-system-spacing.basic-distance   = #(+ (/ (- fist-staff-margin top-margin) staff-space) 2)
+    markup-system-spacing.minimum-distance = 0
+    markup-system-spacing.padding          = -50
+    markup-system-spacing.stretchability   = 0
+    %
     top-markup-spacing.basic-distance   = 0
     top-markup-spacing.minimum-distance = 0
     top-markup-spacing.padding          = -50
     top-markup-spacing.stretchability   = 0
-  % Align First system (extra titling space)
-    % markup-system-spacing.basic-distance   = #(+ (/ (- top-staff-margin top-margin) staff-space) 2)
-    % markup-system-spacing.minimum-distance = 0
-    % markup-system-spacing.padding          = -50
-    % markup-system-spacing.stretchability   = 0
+    %
+    markup-markup-spacing.basic-distance = 0
+    markup-markup-spacing.minimum-distance = 0
+    markup-markup-spacing.padding = -50
+    markup-markup-spacing.stretchability = 0
 }
